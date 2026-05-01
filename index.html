@@ -54,6 +54,24 @@ td.addr-cell:active{background:rgba(255,255,255,0.04)}
 .note-preview{font-size:12px;color:#888;margin-top:4px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nores{display:none;padding:40px;text-align:center;color:#555;font-size:14px}
 </style>
+<script>
+(function(){
+  var hash = "3c19e7a9fdbce9ec4c29994ee2beafddcad2117d6cecc115ca2f1e821d3e1dcc";
+  var klic = "app_access_klice";
+  if(sessionStorage.getItem(klic) !== "1"){
+    var zadane = prompt("Zadejte heslo pro přístup:");
+    if(!zadane){ document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#111;color:#e85b4b;font-family:sans-serif;font-size:18px;">Přístup odepřen.</div>'; throw new Error(); }
+    crypto.subtle.digest("SHA-256", new TextEncoder().encode(zadane)).then(function(buf){
+      var hex = Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0")}).join("");
+      if(hex === hash){
+        sessionStorage.setItem(klic, "1");
+      } else {
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#111;color:#e85b4b;font-family:sans-serif;font-size:18px;">Nesprávné heslo.</div>';
+      }
+    });
+  }
+})();
+</script>
 </head>
 <body>
 
